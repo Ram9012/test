@@ -1,139 +1,217 @@
-# FastAPI Sample Project for Render
+# FastAPI MongoDB CRUD Application
 
-A minimal FastAPI project ready for deployment on Render cloud platform.
+A simple and clean CRUD (Create, Read, Update, Delete) application built with FastAPI and MongoDB, ready for deployment on Render.
 
 ## Features
 
-- ✅ Simple CRUD API for items
-- ✅ Health check endpoints
-- ✅ CORS enabled
-- ✅ Pydantic models for validation
+- ✅ Full CRUD operations for items
+- ✅ MongoDB Atlas integration
+- ✅ Environment-based configuration
+- ✅ Async/await for better performance
+- ✅ CORS enabled for frontend access
 - ✅ Ready for Render deployment
+- ✅ Comprehensive error handling
+
+## Tech Stack
+
+- **FastAPI** - Modern web framework for building APIs
+- **Motor** - Async MongoDB driver for Python
+- **MongoDB Atlas** - Cloud-hosted MongoDB (free tier)
+- **Pydantic** - Data validation
+- **Python-dotenv** - Environment variable management
+
+## Prerequisites
+
+- Python 3.12+
+- MongoDB Atlas account (free tier)
+- Git (for deployment)
+
+## MongoDB Atlas Setup
+
+1. **Create a free MongoDB Atlas account** at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
+
+2. **Create a cluster** (free M0 tier)
+
+3. **Create a database user**:
+   - Go to Database Access
+   - Add a new user with username and password
+   - Remember these credentials!
+
+4. **Whitelist your IP**:
+   - Go to Network Access
+   - Add IP Address → Allow Access from Anywhere (0.0.0.0/0) for development
+
+5. **Get your connection string**:
+   - Go to your cluster → Connect → Connect your application
+   - Copy the connection string (looks like: `mongodb+srv://username:password@cluster.mongodb.net/...`)
+   - Replace `<password>` with your actual password
+
+## Local Development Setup
+
+1. **Clone the repository**:
+   ```bash
+   git clone <your-repo-url>
+   cd test
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Create `.env` file**:
+   ```bash
+   # Copy the example file
+   cp .env.example .env
+   ```
+
+4. **Edit `.env` file** with your MongoDB connection string:
+   ```env
+   MONGODB_URL=mongodb+srv://your_username:your_password@cluster.mongodb.net/?retryWrites=true&w=majority
+   DATABASE_NAME=crud_app
+   PORT=8000
+   ENVIRONMENT=development
+   ```
+
+5. **Run the application**:
+   ```bash
+   python main.py
+   ```
+
+6. **Access the API**:
+   - API: http://localhost:8000
+   - Interactive docs: http://localhost:8000/docs
+   - Alternative docs: http://localhost:8000/redoc
 
 ## API Endpoints
 
-- `GET /` - Root endpoint (health check)
-- `GET /health` - Health check endpoint
-- `POST /items/{item_id}` - Create a new item
-- `GET /items/{item_id}` - Get item by ID
-- `GET /items` - List all items
-- `DELETE /items/{item_id}` - Delete an item
+### Health Check
+- `GET /` - Root health check
+- `GET /health` - Detailed health check with MongoDB status
 
-## Local Development
+### CRUD Operations
 
-### Prerequisites
-- Python 3.11+
-- pip
+#### Create Item
+```http
+POST /items
+Content-Type: application/json
 
-### Installation
-
-1. Create a virtual environment:
-```bash
-python -m venv venv
+{
+  "name": "Laptop",
+  "description": "MacBook Pro 14-inch",
+  "price": 1999.99,
+  "quantity": 5
+}
 ```
 
-2. Activate the virtual environment:
-```bash
-# Windows
-venv\Scripts\activate
-
-# Mac/Linux
-source venv/bin/activate
+#### Get All Items
+```http
+GET /items
 ```
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
+#### Get Single Item
+```http
+GET /items/{item_id}
 ```
 
-4. Run the server:
-```bash
-python main.py
+#### Update Item
+```http
+PUT /items/{item_id}
+Content-Type: application/json
+
+{
+  "price": 1899.99,
+  "quantity": 3
+}
 ```
 
-The API will be available at `http://localhost:8000`
-
-Access the interactive API documentation at:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-
-## Deploying to Render
-
-### Method 1: Using render.yaml (Recommended)
-
-1. Push this project to a GitHub repository
-2. Go to [Render Dashboard](https://dashboard.render.com/)
-3. Click "New" → "Blueprint"
-4. Connect your GitHub repository
-5. Render will automatically detect the `render.yaml` and deploy your app
-
-### Method 2: Manual Deployment
-
-1. Go to [Render Dashboard](https://dashboard.render.com/)
-2. Click "New" → "Web Service"
-3. Connect your GitHub repository
-4. Configure:
-   - **Name**: `fastapi-sample` (or your choice)
-   - **Environment**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-   - **Plan**: `Free`
-
-5. Click "Create Web Service"
-
-Your API will be live at `https://your-app-name.onrender.com`
-
-## Testing the API
-
-### Using curl
-
-```bash
-# Health check
-curl https://your-app-name.onrender.com/health
-
-# Create an item
-curl -X POST "https://your-app-name.onrender.com/items/1" \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Test Item", "description": "A test item", "price": 29.99, "quantity": 5}'
-
-# Get an item
-curl https://your-app-name.onrender.com/items/1
-
-# List all items
-curl https://your-app-name.onrender.com/items
+#### Delete Item
+```http
+DELETE /items/{item_id}
 ```
 
-### Using the Interactive Docs
+## Deployment to Render
 
-Visit `https://your-app-name.onrender.com/docs` to use the Swagger UI for testing.
+1. **Push your code to GitHub**:
+   ```bash
+   git add .
+   git commit -m "MongoDB CRUD application"
+   git push origin main
+   ```
+
+2. **Create a new Web Service on Render**:
+   - Go to [render.com](https://render.com)
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+
+3. **Configure environment variables** in Render dashboard:
+   - `MONGODB_URL` - Your MongoDB Atlas connection string (set as secret)
+   - `DATABASE_NAME` - `crud_app`
+   - `ENVIRONMENT` - `production`
+
+4. **Deploy**:
+   - Render will automatically build and deploy using `render.yaml`
+   - Your API will be available at: `https://your-service.onrender.com`
 
 ## Project Structure
 
 ```
-.
-├── main.py              # Main FastAPI application
+test/
+├── main.py              # FastAPI application with CRUD endpoints
+├── database.py          # MongoDB connection and configuration
+├── models.py            # Pydantic models for data validation
 ├── requirements.txt     # Python dependencies
-├── render.yaml         # Render deployment configuration
+├── render.yaml          # Render deployment configuration
+├── .env.example         # Environment variables template
+├── .env                 # Your local environment variables (not in git)
 ├── .gitignore          # Git ignore rules
 └── README.md           # This file
 ```
 
-## Notes
+## Example Usage with cURL
 
-- The free tier on Render may spin down after inactivity. The first request after inactivity might take 30-60 seconds.
-- This project uses in-memory storage, so data will be lost when the service restarts.
-- For production, consider adding a database (PostgreSQL, MongoDB, etc.)
+```bash
+# Create an item
+curl -X POST "http://localhost:8000/items" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Laptop","description":"MacBook Pro","price":1999.99,"quantity":5}'
 
-## Next Steps
+# Get all items
+curl "http://localhost:8000/items"
 
-To enhance this project, consider:
-- Adding a database (PostgreSQL with SQLAlchemy)
-- Implementing authentication (JWT tokens)
-- Adding more comprehensive error handling
-- Setting up logging
-- Adding unit tests
-- Implementing rate limiting
+# Get specific item (replace with actual ID)
+curl "http://localhost:8000/items/65a1b2c3d4e5f6g7h8i9j0k1"
+
+# Update item
+curl -X PUT "http://localhost:8000/items/65a1b2c3d4e5f6g7h8i9j0k1" \
+  -H "Content-Type: application/json" \
+  -d '{"price":1899.99}'
+
+# Delete item
+curl -X DELETE "http://localhost:8000/items/65a1b2c3d4e5f6g7h8i9j0k1"
+```
+
+## Development Notes
+
+- The application uses Motor for async MongoDB operations
+- All endpoints use proper HTTP status codes
+- Error handling is implemented for common scenarios
+- CORS is enabled for all origins (configure for production use)
+- MongoDB ObjectIds are used as item identifiers
+
+## Environment Variables
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `MONGODB_URL` | MongoDB connection string | `mongodb://localhost:27017` | Yes |
+| `DATABASE_NAME` | Database name | `crud_app` | No |
+| `PORT` | Server port | `8000` | No |
+| `ENVIRONMENT` | Environment mode | `development` | No |
 
 ## License
 
 MIT
+
+## Support
+
+For issues or questions, please open an issue on GitHub.

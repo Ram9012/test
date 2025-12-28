@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: fastapi-sample
+    name: fastapi-mongodb-crud
     env: python
     region: oregon
     plan: free
@@ -9,3 +9,9 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
+      - key: MONGODB_URL
+        sync: false
+      - key: DATABASE_NAME
+        value: crud_app
+      - key: ENVIRONMENT
+        value: production
