@@ -64,15 +64,6 @@ A simple and clean CRUD (Create, Read, Update, Delete) application built with Fa
    # Copy the example file
    cp .env.example .env
    ```
-
-4. **Edit `.env` file** with your MongoDB connection string:
-   ```env
-   MONGODB_URL=mongodb+srv://your_username:your_password@cluster.mongodb.net/?retryWrites=true&w=majority
-   DATABASE_NAME=crud_app
-   PORT=8000
-   ENVIRONMENT=development
-   ```
-
 5. **Run the application**:
    ```bash
    python main.py
