@@ -43,7 +43,7 @@ A simple and clean CRUD (Create, Read, Update, Delete) application built with Fa
 
 5. **Get your connection string**:
    - Go to your cluster → Connect → Connect your application
-   - Copy the connection string (looks like: `mongodb+srv://username:password@cluster.mongodb.net/...`)
+   - Copy the connection string 
    - Replace `<password>` with your actual password
 
 ## Local Development Setup
